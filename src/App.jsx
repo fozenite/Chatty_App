@@ -39,10 +39,9 @@ class App extends Component {
       currentUser: {name: "Bob"},
       messages  : [],
       value: ""
-
     }
 
-    this.ws = new WebSocket('ws://localhost:3001')
+
   }
 
 
@@ -50,11 +49,24 @@ class App extends Component {
 
   componentDidMount() {
 
+    this.ws = new WebSocket('ws://localhost:3001')
+    this.ws.onopen = (event) => {
+    console.log("Connected to server");
+    };
+
     this.ws.onmessage = (e) => {
       const messageFromWSS = JSON.parse(e.data)
-      const newMessage = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content }
-      const messages = this.state.messages.concat(newMessage)
-      this.setState({messages: messages})
+
+      if(messageFromWSS.type !== "incomingNotification"){
+        const newMessage = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type }
+        const messages = this.state.messages.concat(newMessage)
+        this.setState({messages: messages})
+      } else {
+        const newNotification = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type }
+        const notifPlusmessages = this.state.messages.concat(newNotification)
+        this.setState({messages: notifPlusmessages})
+      }
+
     }
 
   }
@@ -62,10 +74,8 @@ class App extends Component {
 
 
   handleInsertUserMessage = (e) => {
-    console.log(e.target.className)
-
     if(e.key == 'Enter'){
-      const newMessage = {id: uuidV4(),username: this.state.currentUser.name, content: e.target.value};
+      const newMessage = {id: uuidV4(),username: this.state.currentUser.name, content: e.target.value, type: "postMessage"};
       //Send Message to Server
       this.ws.send(JSON.stringify(newMessage));
       const messages = this.state.messages.concat(newMessage)
@@ -79,7 +89,15 @@ class App extends Component {
   handleUserChangeRequest = (e) => {
     if(e.key == 'Enter'){
       let updateUser = e.target.value
-      this.setState({currentUser: {name: updateUser}})
+      let currentUser = this.state.currentUser.name
+      const newNotificiationMessage = {id: uuidV4(),username: currentUser, content: `User:${currentUser} has changed their name to User:${updateUser}`, type: "postNotification"};
+      //Send Message to Server
+      this.ws.send(JSON.stringify(newNotificiationMessage));
+      const messages = this.state.messages.concat(newNotificiationMessage)
+
+
+      this.setState({currentUser: {name: updateUser},
+                      messages: messages})
     }
   }
 
