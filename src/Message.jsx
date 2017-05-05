@@ -21,17 +21,23 @@ class Message extends Component {
 
   messageTypeSpecificOutputN = () => {
     let b = <div></div>
-    if ((this.props.type !== "incomingMessage")&&(this.props.type !== "postMessage"))
-    {
+
+    if(this.props.username === "ServerOnConnect") {
+      b= <div>
+          A new user has entered the channel
+        </div>
+    } else if (this.props.username === "ServerOnDisconnect"){
+      b= <div>
+          A user has left the channel
+        </div>
+    } else if ((this.props.type !== "incomingMessage")&&(this.props.type !== "postMessage")) {
         b =<div>
             {this.props.content}
            </div>
     }
 
 
-        return (
-          b
-        );
+    return (b);
   }
 
  render() {

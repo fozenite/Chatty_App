@@ -5,31 +5,6 @@ const uuidV4 = require('uuid/v4');
 
 
 
-// let IsJsonString = (str) => {
-//     try {
-//         JSON.parse(str);
-//     } catch (e) {
-//         return false;
-//     }
-//     return true;
-//   }
-
-// const appData = {
-//                   currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-//                   messages: [
-//                     {
-//                       id: 1,
-//                       username: "Bob",
-//                       content: "Has anyone seen my marbles?",
-//                     },
-//                     {
-//                       id: 2,
-//                       username: "Anonymous",
-//                       content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-//                     }
-//                   ]
-//               }
-
 class App extends Component {
 
 
@@ -38,7 +13,7 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Bob"},
       messages  : [],
-      value: ""
+      clientCount: 0
     }
 
 
@@ -49,7 +24,7 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.ws = new WebSocket('ws://localhost:3001')
+    this.ws = new WebSocket('ws://172.46.1.62:3001')
     this.ws.onopen = (event) => {
     console.log("Connected to server");
     };
@@ -60,11 +35,17 @@ class App extends Component {
       if(messageFromWSS.type !== "incomingNotification"){
         const newMessage = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type }
         const messages = this.state.messages.concat(newMessage)
-        this.setState({messages: messages})
+
       } else {
         const newNotification = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type }
         const notifPlusmessages = this.state.messages.concat(newNotification)
-        this.setState({messages: notifPlusmessages})
+          if((messageFromWSS.username !=="ServerOnConnect")&&(messageFromWSS.username !=="ServerOnDisconnect")){
+            this.setState({messages: notifPlusmessages})
+          } else {
+            this.setState({messages: notifPlusmessages,
+                          clientCount: Number(messageFromWSS.content)})
+          }
+
       }
 
     }
@@ -110,7 +91,7 @@ class App extends Component {
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
-
+          <div className="userCount">{this.state.clientCount} users online</div>
         </nav>
         <MessageList messagesArray={this.state.messages}/>
         <ChatBar currentUser={this.state.currentUser.name} handleInsertUserMessage={this.handleInsertUserMessage} handleUserChangeRequest={this.handleUserChangeRequest} />
