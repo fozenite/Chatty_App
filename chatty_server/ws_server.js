@@ -2,6 +2,7 @@
 // const express = require('express');
 const SocketServer = require('ws').Server;
 const uuidV4 = require('uuid/v4');
+const randomColor = require('randomcolor')
 // Set the port to 3001
 const PORT = 3001;
 
@@ -22,7 +23,7 @@ const wss = new SocketServer({ port: PORT });
 // the ws parameter in the callback.
 console.log(`Listening on ${PORT}`);
 wss.on('connection', (ws) => {
-
+const setColor = randomColor({luminosity: 'dark'})
 
   const broadcast = (message) => {
     wss.clients.forEach((c) => {
@@ -51,7 +52,7 @@ wss.on('connection', (ws) => {
   broadcastAll(onConnectMessage)
 
 
-  console.log(clientCounter())
+
 
 
 
@@ -62,11 +63,10 @@ wss.on('connection', (ws) => {
   ws.on('message', (rawMessage) => {
     const messageFromClient = JSON.parse(rawMessage);
     if(messageFromClient.type !== "postNotification" ){
-      const outGoingMessage = {id: messageFromClient.id, username: messageFromClient.username, content: messageFromClient.content, type: "incomingMessage" }
-      broadcast(outGoingMessage)
+      const outGoingMessage = {id: uuidV4(), username: messageFromClient.username, content: messageFromClient.content, type: "incomingMessage", color: setColor }
+      broadcastAll(outGoingMessage)
     } else {
       const outGoingNotification ={id: messageFromClient.id, username: messageFromClient.username, content: messageFromClient.content, type: "incomingNotification" }
-      console.log(outGoingNotification)
       broadcast(outGoingNotification)
     }
 
@@ -77,7 +77,7 @@ wss.on('connection', (ws) => {
     console.log('Client disconnected')
     const onDisconnectMessage = {id: uuidV4(), username: "ServerOnDisconnect", content: clientCounter(), type: "incomingNotification" }
     broadcastAll(onDisconnectMessage)
-    console.log(clientCounter())
+
   });
 });
 

@@ -11,9 +11,10 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentUser: {name: "Bob"},
+      currentUser: {name: "Anonymous"},
       messages  : [],
-      clientCount: 0
+      clientCount: 0,
+      serverUserList: []
     }
 
 
@@ -33,11 +34,11 @@ class App extends Component {
       const messageFromWSS = JSON.parse(e.data)
 
       if(messageFromWSS.type !== "incomingNotification"){
-        const newMessage = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type }
+        const newMessage = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type, color: messageFromWSS.color }
         const messages = this.state.messages.concat(newMessage)
         this.setState({messages: messages})
       } else {
-        const newNotification = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type }
+        const newNotification = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type}
         const notifPlusmessages = this.state.messages.concat(newNotification)
           if((messageFromWSS.username !=="ServerOnConnect")&&(messageFromWSS.username !=="ServerOnDisconnect")){
             this.setState({messages: notifPlusmessages})
@@ -56,14 +57,14 @@ class App extends Component {
 
   handleInsertUserMessage = (e) => {
     if(e.key == 'Enter'){
-      const newMessage = {id: uuidV4(),username: this.state.currentUser.name, content: e.target.value, type: "postMessage"};
+      const newMessage = {username: this.state.currentUser.name, content: e.target.value, type: "postMessage"};
       //Send Message to Server
       this.ws.send(JSON.stringify(newMessage));
       const messages = this.state.messages.concat(newMessage)
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
       e.target.value = ''
-      this.setState({messages: messages})
+      // this.setState({messages: messages})
     }
   }
 

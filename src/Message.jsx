@@ -42,7 +42,7 @@ class Message extends Component {
 
  render() {
   var style = {
-      color: 'red'
+      color: this.props.color
   }
   let output = this.messageTypeSpecificOutputM(style)
   let output2 = this.messageTypeSpecificOutputN()
