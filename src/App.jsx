@@ -35,7 +35,7 @@ class App extends Component {
       if(messageFromWSS.type !== "incomingNotification"){
         const newMessage = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type }
         const messages = this.state.messages.concat(newMessage)
-
+        this.setState({messages: messages})
       } else {
         const newNotification = {id: messageFromWSS.id, username: messageFromWSS.username, content: messageFromWSS.content, type: messageFromWSS.type }
         const notifPlusmessages = this.state.messages.concat(newNotification)

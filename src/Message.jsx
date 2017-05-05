@@ -3,12 +3,12 @@ import React, {Component} from 'react';
 
 class Message extends Component {
 
-  messageTypeSpecificOutputM = () => {
+  messageTypeSpecificOutputM = (style) => {
     let a = <div></div>
     if ((this.props.type === "incomingMessage")||(this.props.type === "postMessage"))
     {
         a =<div>
-            <span className="message-username">{this.props.username}</span>
+            <span className="message-username" style={style}>{this.props.username}</span>
             <span className="message-content">{this.props.content}</span>
            </div>
     }
@@ -41,7 +41,10 @@ class Message extends Component {
   }
 
  render() {
-  let output = this.messageTypeSpecificOutputM()
+  var style = {
+      color: 'red'
+  }
+  let output = this.messageTypeSpecificOutputM(style)
   let output2 = this.messageTypeSpecificOutputN()
    return (
     <div>
