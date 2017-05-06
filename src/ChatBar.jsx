@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 
 class ChatBar extends Component {
 
 
  constructor(props) {
-    super(props);
-    this.state = {value: this.props.currentUser};
+    super(props)
+    this.state = {value: this.props.currentUser}
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this)
 
   }
   handleChange(event) {
-    this.setState({value: event.target.value});
+    this.setState({value: event.target.value})
   }
   // console.log(this.props.currentUser)
   render() {
@@ -23,9 +23,9 @@ class ChatBar extends Component {
             <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyPress ={this.props.handleInsertUserMessage} />
        </footer>
       </div>
-    );
+    )
   }
 }
-export default ChatBar;
+export default ChatBar
 
 

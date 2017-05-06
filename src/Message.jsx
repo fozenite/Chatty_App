@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 
 
 class Message extends Component {
@@ -7,16 +7,12 @@ class Message extends Component {
     let a = <div></div>
     if ((this.props.type === "incomingMessage")||(this.props.type === "postMessage"))
     {
-        a =<div>
-            <span className="message-username" style={style}>{this.props.username}</span>
-            <span className="message-content">{this.props.content}</span>
-           </div>
+      a =<div>
+          <span className="message-username" style={style}>{this.props.username}</span>
+          <span className="message-content" dangerouslySetInnerHTML={{__html: this.props.content}}></span>
+         </div>
     }
-
-
-        return (
-          a
-        );
+    return a
   }
 
   messageTypeSpecificOutputN = () => {
@@ -25,19 +21,17 @@ class Message extends Component {
     if(this.props.username === "ServerOnConnect") {
       b= <div>
           A new user has entered the channel
-        </div>
+         </div>
     } else if (this.props.username === "ServerOnDisconnect"){
       b= <div>
           A user has left the channel
-        </div>
+         </div>
     } else if ((this.props.type !== "incomingMessage")&&(this.props.type !== "postMessage")) {
-        b =<div>
+      b =<div>
             {this.props.content}
-           </div>
+         </div>
     }
-
-
-    return (b);
+    return (b)
   }
 
  render() {
@@ -46,7 +40,7 @@ class Message extends Component {
   }
   let output = this.messageTypeSpecificOutputM(style)
   let output2 = this.messageTypeSpecificOutputN()
-   return (
+  return (
     <div>
      <div className="message">
        {output}
@@ -55,9 +49,9 @@ class Message extends Component {
         {output2}
      </div>
     </div>
-   );
- };
+   )
+ }
 }
 
-export default Message;
+export default Message
 

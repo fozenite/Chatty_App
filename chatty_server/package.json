@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "4.15.2",
+    "node-fetch": "^1.6.3",
     "node-uuid": "1.4.8",
+    "querystring": "^0.2.0",
     "randomcolor": "^0.5.2",
     "uuid": "^3.0.1",
     "ws": "2.3.1"
