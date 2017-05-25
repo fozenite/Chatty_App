@@ -1,7 +1,8 @@
 Chatty App
 =====================
 
-##Functional Requirements
+## Functional Requirements
+
 Primarily a client-side SPA (single-page app) built with ReactJS
 Based on the HTML and CSS provided
 Contains a chat log displaying messages and notifications
@@ -14,13 +15,15 @@ When any connected user changes their name, all connected users are notified of 
 Notifications are styled differently from chat messages
 Header will display the count of connected users
 When the number of connected users changes, this count will be updated for all connected users
-(STRETCH) Different users' names will each be coloured differently
-Bonus: the colouring is consistent between connected user instances or is calculated algorithmically based on their name, or is manually selectable by users, or any other interesting approach!
-##Technical Specifications
-Stack:
+Different users' names are coloured differently
+Giphy API implementation
+
+## Technical Specifications
+### Stack:
 
 Webpack with Babel, JSX, ES6, webpack dev server (comes with boilerplate)
 WebSockets using Node package ws on the server-side, and native WebSocket on client side
+
 ReactJS
 React component guidelines:
 
@@ -42,4 +45,4 @@ When a client sends a message:
 the server should determine what to do based on the message's type property
 it should construct a message to send back in response with a corresponding type and a generated unique id (e.g. a UUID)
 When a client connects or disconnects, the server should broadcast the current user count to all connected clients
-(STRETCH) the server may assign and/or keep track of user colours (there are several ways of solving this)
+
