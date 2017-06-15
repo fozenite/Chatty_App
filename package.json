@@ -47,6 +47,7 @@
   "dependencies": {
     "node-uuid": "1.4.8",
     "react": "^15.2.1",
-    "react-dom": "^15.2.1"
+    "react-dom": "^15.2.1",
+     "uuid": "^3.0.1"
   }
 }
